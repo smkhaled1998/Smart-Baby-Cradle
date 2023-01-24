@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_baby_cradle/home-layout/home-cubit.dart';
+import 'package:smart_baby_cradle/home-layout/home-states.dart';
+
+import 'dart:math' as math;
+
+
 import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
-
+//
 import 'package:flutter_svg/svg.dart';
 
-import 'package:smart_baby_cradle/cradle-control-page/device_cubit.dart';
-import 'package:smart_baby_cradle/cradle-control-page/device_states.dart';
 import 'package:smart_baby_cradle/string_to_color.dart';
+
 
 
 class ControlCradleScreen extends StatelessWidget {
@@ -16,10 +20,12 @@ class ControlCradleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DeviceCubit,DeviceStates>(
+    return BlocConsumer<HomeCubit,HomeStates>(
       listener: (ctx,state){},
       builder: (ctx,state){
-        var cubit = DeviceCubit.get(context);
+        var cubit = HomeCubit.get(context);
+
+
         return Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -121,7 +127,7 @@ class ControlCradleScreen extends StatelessWidget {
                                               closedShape: const RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
                                               openBuilder: (BuildContext context, VoidCallback _) {
-                                                return Center(child: Text('SpotLight'));
+                                                return Center(child: Text('data'));
                                               },
                                               tappable :  false,
                                               closedBuilder: (BuildContext _, VoidCallback openContainer) {
@@ -135,7 +141,7 @@ class ControlCradleScreen extends StatelessWidget {
                                                       color: Colors.grey[300]!,
                                                       width: 0.6,
                                                     ),
-                                                    color: cubit.isActiveSpot ? "#ff5f5f".toColor() : Colors.white,
+                                                    color: cubit.isActiveToys ? "#c207db".toColor() : Colors.white,
                                                   ),
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(14.0),
@@ -147,8 +153,8 @@ class ControlCradleScreen extends StatelessWidget {
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             SvgPicture.asset(
-                                                              'assets/svg/light.svg',
-                                                              color:cubit.isActiveSpot ? Colors.white : Colors.black,
+                                                              'assets/svg/baby-mobile-toys-svgrepo-com.svg',
+                                                              color:cubit.isActiveToys ? Colors.white : Colors.black,
                                                               height: 30,
                                                             ), // الأيقونة
                                                             const SizedBox(
@@ -157,11 +163,11 @@ class ControlCradleScreen extends StatelessWidget {
                                                             SizedBox(
                                                               width: 65,
                                                               child: Text(
-                                                                'Smart Spotlight',
+                                                                'Smart Toys',
                                                                 style: TextStyle(
                                                                     height: 1.2,
                                                                     fontSize: 14,
-                                                                    color: cubit.isActiveSpot ? Colors.white : Colors.black,
+                                                                    color: cubit.isActiveToys ? Colors.white : Colors.black,
                                                                     fontWeight: FontWeight.w500),
                                                               ),
                                                             ),// اسم المربع نفسه
@@ -173,12 +179,11 @@ class ControlCradleScreen extends StatelessWidget {
                                                           scaleX: 0.85,
                                                           child:
                                                           CupertinoSwitch(
-                                                            value: cubit.isActiveSpot,
+                                                            value: cubit.isActiveToys,
                                                             onChanged: (v){
-                                                              cubit.activeSpot();
-
+                                                              cubit.activeToys();
                                                             },
-                                                            activeColor: cubit.isActiveSpot
+                                                            activeColor: cubit.isActiveToys
                                                                 ? Colors.white.withOpacity(0.4)
                                                                 : Colors.black,
                                                             trackColor: Colors.black,
@@ -190,6 +195,7 @@ class ControlCradleScreen extends StatelessWidget {
                                                 );
                                               }),
                                         ),
+
                                         SizedBox(width: 20,),
                                         Expanded(
                                           child: OpenContainer(
@@ -367,9 +373,197 @@ class ControlCradleScreen extends StatelessWidget {
                                               closedShape: const RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
                                               openBuilder: (BuildContext context, VoidCallback _) {
-                                                return Center(child: Text('data'));
+                                                return Scaffold(
+                                                  appBar: AppBar(
+                                                    elevation: 0,
+                                                   backgroundColor:Color(0xFFfce2e1) ,
+                                                    leading: IconButton(
+                                                        onPressed: (){
+                                                          Navigator.pop(context);
+                                                        },
+                                                        icon: Icon(CupertinoIcons.arrow_left,color: Colors.black,)),
+                                                    title: Center(child: Text("Sensor Readings",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 24),)),
+                                                  ),
+                                                  body: Center(
+                                                    child: Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      height: MediaQuery.of(context).size.height,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(15),
+                                                        gradient: LinearGradient(
+                                                            begin: Alignment.topLeft,
+                                                            end: Alignment.bottomRight,
+                                                            colors: <Color>[
+                                                              Colors.white,
+                                                              Color(0xFFfce2e1),
+                                                              Colors.white,
+                                                            ]),
+                                                      ),
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Spacer(),
+                                                          Card(
+                                                            margin: EdgeInsets.all(15) ,
+                                                            shadowColor: Colors.blueGrey,
+                                                            child: Container(
+                                                              width: double.infinity,
+                                                              child: Column(
+                                                                children: [
+                                                                  SizedBox(height: 10),
+                                                                  Text('Temperature Reading',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                                                  SizedBox(height: 10,),
+                                                                  Container(
+                                                                      width:80,
+                                                                      height: 80,
+                                                                      child: Card(child: Center(child: Text(cubit.tReading.toString(),style: TextStyle(fontWeight: FontWeight.bold),)))),
+                                                                  SizedBox(height: 20,)
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Spacer(),
+                                                          Card(
+                                                            margin: EdgeInsets.all(15) ,
+                                                            shadowColor: Colors.blueGrey,
+                                                            child: Container(
+                                                              width: double.infinity,
+                                                              child: Column(
+                                                                children: [
+                                                                  SizedBox(height: 10),
+                                                                  Text('Humidity Reading',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                                                  SizedBox(height: 10,),
+                                                                  Container(
+                                                                      width:80,
+                                                                      height: 80,
+                                                                      child: Card(child: Center(child: Text(cubit.hReading.toString(),style: TextStyle(fontWeight: FontWeight.bold),)))),
+                                                                  SizedBox(height: 20,)
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Spacer()
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                                //   Center(child: Text('Omar')
+                                                // // SizedBox(
+                                                // //   width: kDiameter + 35,
+                                                // //   height: kDiameter + 35,
+                                                // //   child: Stack(
+                                                // //     alignment: Alignment.center,
+                                                // //     children: [
+                                                // //       Container(
+                                                // //         width: kDiameter + 35,
+                                                // //         height: kDiameter + 35,
+                                                // //         decoration: BoxDecoration(
+                                                // //           color: Colors.white.withOpacity(0.2),
+                                                // //           shape: BoxShape.circle,
+                                                // //         ),
+                                                // //       ),
+                                                // //       const Center(
+                                                // //         child: CustomArc(
+                                                // //             color:Colors.blue,
+                                                // //             diameter: kDiameter,
+                                                // //             // sweepAngle: progressVal
+                                                // //         ),
+                                                // //       ),
+                                                // //       Center(
+                                                // //         child: Container(
+                                                // //           width: kDiameter - 20,
+                                                // //           height: kDiameter - 20,
+                                                // //           decoration: BoxDecoration(
+                                                // //               color: Colors.white,
+                                                // //               shape: BoxShape.circle,
+                                                // //               border: Border.all(
+                                                // //                 color: Colors.white,
+                                                // //                 width: 15,
+                                                // //                 style: BorderStyle.solid,
+                                                // //               ),
+                                                // //               boxShadow: [
+                                                // //                 BoxShadow(
+                                                // //                   color: Colors.grey.withOpacity(0.3),
+                                                // //                   spreadRadius: 5,
+                                                // //                   blurRadius: 7,
+                                                // //                   offset: const Offset(0, 3),
+                                                // //                 ),
+                                                // //               ]),
+                                                // //           // child: SleekCircularSlider (
+                                                // //           //   min: kMinDegree,
+                                                // //           //   max: kMaxDegree,
+                                                // //           //   initialValue: angleRange(progressVal, kMinDegree, kMaxDegree),
+                                                // //           //   appearance: CircularSliderAppearance(
+                                                // //           //     spinnerMode: false,
+                                                // //           //     startAngle: 180,
+                                                // //           //     angleRange: 180,
+                                                // //           //     size: kDiameter - 30,
+                                                // //           //     // customWidths: CustomSliderWidths(
+                                                // //           //     //   trackWidth: 20,
+                                                // //           //     //   shadowWidth: 0,
+                                                // //           //     //   progressBarWidth: 01,
+                                                // //           //     //   handlerSize: 5,
+                                                // //           //     // ),
+                                                // //           //     // customColors: CustomSliderColors(
+                                                // //           //     //   hideShadow: true,
+                                                // //           //     //   progressBarColor: Colors.transparent,
+                                                // //           //     //   trackColor: Colors.transparent,
+                                                // //           //     //   dotColor: Colors.blue,
+                                                // //           //     // ),
+                                                // //           //   ),
+                                                // //           //   // onChange: onChange,
+                                                // //           //   innerWidget: (percentage) {
+                                                // //           //     return Center(
+                                                // //           //       child: Row(
+                                                // //           //         mainAxisAlignment: MainAxisAlignment.center,
+                                                // //           //         crossAxisAlignment: CrossAxisAlignment.start,
+                                                // //           //         children: [
+                                                // //           //           Text(
+                                                // //           //             percentage.toInt().toString(),
+                                                // //           //             style: const TextStyle(
+                                                // //           //                 height: 0,
+                                                // //           //                 fontSize: 45,
+                                                // //           //                 color: Colors.black,
+                                                // //           //                 fontWeight: FontWeight.w500),
+                                                // //           //           ),
+                                                // //           //           Padding(
+                                                // //           //             padding: const EdgeInsets.only(top: 10),
+                                                // //           //             child: Row(
+                                                // //           //               children: const [
+                                                // //           //                 Text(
+                                                // //           //                   "o",
+                                                // //           //                   style: TextStyle(
+                                                // //           //                       height: 0,
+                                                // //           //                       letterSpacing: 2,
+                                                // //           //                       fontSize: 12,
+                                                // //           //                       color: Colors.black,
+                                                // //           //                       fontWeight: FontWeight.normal),
+                                                // //           //                 ),
+                                                // //           //                 Text(
+                                                // //           //                   "C",
+                                                // //           //                   style: TextStyle(
+                                                // //           //                       height: 0,
+                                                // //           //                       fontSize: 16,
+                                                // //           //                       color: Colors.black,
+                                                // //           //                       fontWeight: FontWeight.w500),
+                                                // //           //                 ),
+                                                // //           //               ],
+                                                // //           //             ),
+                                                // //           //           ),
+                                                // //           //         ],
+                                                // //           //       ),
+                                                // //           //     );
+                                                // //           //   },
+                                                // //           // ),
+                                                // //         ),
+                                                // //       ),
+                                                // //     ],
+                                                // //   ),
+                                                // // )
+                                                // );
                                               },
-                                              tappable :  false,
+                                              tappable :  true,
                                               closedBuilder: (BuildContext _, VoidCallback openContainer) {
                                                 return AnimatedContainer(
                                                   duration: const Duration(milliseconds: 300),
@@ -381,7 +575,7 @@ class ControlCradleScreen extends StatelessWidget {
                                                       color: Colors.grey[300]!,
                                                       width: 0.6,
                                                     ),
-                                                    color: cubit.isActiveToys ? "#c207db".toColor() : Colors.white,
+                                                    color: cubit.isActiveSpot ? "#ff5f5f".toColor() : Colors.white,
                                                   ),
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(14.0),
@@ -393,42 +587,43 @@ class ControlCradleScreen extends StatelessWidget {
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             SvgPicture.asset(
-                                                              'assets/svg/baby-mobile-toys-svgrepo-com.svg',
-                                                              color:cubit.isActiveToys ? Colors.white : Colors.black,
-                                                              height: 30,
+                                                              'assets/svg/information-help-svgrepo-com.svg',
+                                                              color:cubit.isActiveSpot ? Colors.white : Colors.black,
+                                                              height: 40,
                                                             ), // الأيقونة
                                                             const SizedBox(
-                                                              height: 14,
+                                                              height: 35,
                                                             ),
                                                             SizedBox(
                                                               width: 65,
                                                               child: Text(
-                                                                'Smart Toys',
+                                                                'Sensor Reading',
                                                                 style: TextStyle(
                                                                     height: 1.2,
                                                                     fontSize: 14,
-                                                                    color: cubit.isActiveToys ? Colors.white : Colors.black,
+                                                                    color: cubit.isActiveSpot ? Colors.white : Colors.black,
                                                                     fontWeight: FontWeight.w500),
                                                               ),
                                                             ),// اسم المربع نفسه
                                                           ],
                                                         ),//المربع كامل
-                                                        Transform.scale(
-                                                          alignment: Alignment.center,
-                                                          scaleY: 0.8,
-                                                          scaleX: 0.85,
-                                                          child:
-                                                          CupertinoSwitch(
-                                                            value: cubit.isActiveToys,
-                                                            onChanged: (v){
-                                                              cubit.activeToys();
-                                                            },
-                                                            activeColor: cubit.isActiveToys
-                                                                ? Colors.white.withOpacity(0.4)
-                                                                : Colors.black,
-                                                            trackColor: Colors.black,
-                                                          ),
-                                                        ), // الزرار بتاع القفل والفتح
+                                                        // Transform.scale(
+                                                        //   alignment: Alignment.center,
+                                                        //   scaleY: 0.8,
+                                                        //   scaleX: 0.85,
+                                                        //   child:
+                                                        //   CupertinoSwitch(
+                                                        //     value: cubit.isActiveSpot,
+                                                        //     onChanged: (v){
+                                                        //       cubit.activeSpot();
+                                                        //
+                                                        //     },
+                                                        //     activeColor: cubit.isActiveSpot
+                                                        //         ? Colors.white.withOpacity(0.4)
+                                                        //         : Colors.black,
+                                                        //     trackColor: Colors.black,
+                                                        //   ),
+                                                        // ), // الزرار بتاع القفل والفتح
                                                       ],
                                                     ),
                                                   ),
@@ -437,36 +632,11 @@ class ControlCradleScreen extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-
-
+                                    SizedBox(height: 20,),
 
                                   ],
                                 )
-                              // GridView.builder(
-                              //     padding:
-                              //     const EdgeInsets.only(top: 10, bottom: 20),
-                              //     gridDelegate:
-                              //     const SliverGridDelegateWithMaxCrossAxisExtent(
-                              //         maxCrossAxisExtent: 200,
-                              //         childAspectRatio: 3 / 4,
-                              //         crossAxisSpacing: 20,
-                              //         mainAxisSpacing: 20),
-                              //     itemCount: 2,
-                              //     itemBuilder: (BuildContext ctx, index) {
-                              //       return Devices(
-                              //         name: cubit.devices[index].name,
-                              //         svg: cubit.devices[index].icon,
-                              //         color: cubit.devices[index].color.toColor(),
-                              //         isActive: cubit.devices[index].isActive,
-                              //         onChanged: (val) {
-                              //           // cubit.toggleSwitch(val);
-                              //           if (cubit.devices[index].isActive) {
-                              //              !cubit.devices[index].isActive;
-                              //           }else {cubit.devices[index].isActive;}
-                              //           print(cubit.devices[index].isActive);
-                              //         },
-                              //       );
-                              //     }),
+
                             ),
                           ],
                         ),
@@ -481,5 +651,7 @@ class ControlCradleScreen extends StatelessWidget {
       },
 
     );
+
   }
+
 }
