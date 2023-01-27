@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "508573635065",
-    "firebase_url": "https://smart-baby-monitoring-sy-39539-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "smart-baby-monitoring-sy-39539",
-    "storage_bucket": "smart-baby-monitoring-sy-39539.appspot.com"
+    "project_number": "984750515590",
+    "firebase_url": "https://smart-baby-monitoring-sy-ce203-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "smart-baby-monitoring-sy-ce203",
+    "storage_bucket": "smart-baby-monitoring-sy-ce203.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:508573635065:android:66fcce7be3596fc791ed28",
+        "mobilesdk_app_id": "1:984750515590:android:2d8ce0c328a106d38c7807",
         "android_client_info": {
           "package_name": "com.example.smart_baby_cradle"
         }
       },
       "oauth_client": [
         {
-          "client_id": "508573635065-absn4h1em0d1n3qcjmqopsrs0krik2ll.apps.googleusercontent.com",
+          "client_id": "984750515590-vvnui9elp25st1n76j0d4iau5nb4kf1j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCnj-dEWKobIto-qNcwMtTM0CR-nwknwaw"
+          "current_key": "AIzaSyCOeJ9uhHum_Jcmm3t_ZRHEepLa2Pfv3z4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "508573635065-absn4h1em0d1n3qcjmqopsrs0krik2ll.apps.googleusercontent.com",
+              "client_id": "984750515590-vvnui9elp25st1n76j0d4iau5nb4kf1j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

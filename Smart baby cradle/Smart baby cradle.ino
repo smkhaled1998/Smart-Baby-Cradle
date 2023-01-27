@@ -3,8 +3,8 @@
 #include <addons/TokenHelper.h>
 #include <addons/RTDBHelper.h>
 
-#define DATABASE_URL "https://smart-baby-monitoring-sy-39539-default-rtdb.asia-southeast1.firebasedatabase.app/"
-#define API_KEY "AIzaSyCnGxe7LaWQzhvTkDa1FqaYGgOpG9GBPqA"
+#define DATABASE_URL "https://smart-baby-monitoring-sy-ce203-default-rtdb.asia-southeast1.firebasedatabase.app/"
+#define API_KEY "vQLmtkPDc2brPVATQSuMRZ9yJMvExKUqVE8LN2B9"
 
 #define ssid "Galaxy S10e"
 #define password "12345678"
